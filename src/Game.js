@@ -81,7 +81,18 @@ class Game extends Component {
     this.animateRoll();
   }
 
+  displayRollInfo() {
+    const messages = [
+      "0 Rolls Left",
+      "1 Roll Left",
+      "2 Rolls Left",
+      "Starting Round"
+    ]
+    return messages[this.state.rollsLeft];
+  }
+
   render() {
+    const {dice, locked, rollsLeft, rolling, scores} = this.state;
     return (
       <div className='Game'>
         <header className='Game-header'>
@@ -89,24 +100,24 @@ class Game extends Component {
 
           <section className='Game-dice-section'>
             <Dice
-              dice={this.state.dice}
-              locked={this.state.locked}
+              dice={dice}
+              locked={locked}
               handleClick={this.toggleLocked}
-              disabled={this.state.rollsLeft === 0}
-              rolling={this.state.rolling}
+              disabled={rollsLeft === 0}
+              rolling={rolling}
             />
             <div className='Game-button-wrapper'>
               <button
                 className='Game-reroll'
-                disabled={this.state.locked.every(x => x) || this.state.rollsLeft === 0}
+                disabled={locked.every(x => x) || rollsLeft === 0 || rolling}
                 onClick={this.animateRoll}
               >
-                {this.state.rollsLeft} Rerolls Left
+                {this.displayRollInfo()}
               </button>
             </div>
           </section>
         </header>
-        <ScoreTable doScore={this.doScore} scores={this.state.scores} />
+        <ScoreTable doScore={this.doScore} scores={scores} />
       </div>
     );
   }
